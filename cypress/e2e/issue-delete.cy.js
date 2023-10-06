@@ -1,4 +1,4 @@
-describe('Issue create', () => {
+describe('Issue delete', () => {
 
     beforeEach(() => {
         cy.visit('/');

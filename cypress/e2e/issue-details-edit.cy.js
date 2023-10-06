@@ -11,8 +11,8 @@ describe('Issue details editing', () => {
     getIssueDetailsModal().within(() => {
       cy.get('[data-testid="select:type"]').click('bottomRight');
       cy.get('[data-testid="select-option:Story"]')
-          .trigger('mouseover')
-          .trigger('click');
+        .trigger('mouseover')
+        .trigger('click');
       cy.get('[data-testid="select:type"]').should('contain', 'Story');
 
       cy.get('[data-testid="select:status"]').click('bottomRight');
@@ -61,5 +61,13 @@ describe('Issue details editing', () => {
     });
   });
 
+  it('Should check reporter`s name has only characters', () => {
+    cy.get('[data-testid="select:reporter"]').then(($name) => {
+      const reporter = $name.text();
+      expect(reporter).to.match(/^[A-Za-z\s]*$/);
+    });
+
+  });
+
   const getIssueDetailsModal = () => cy.get('[data-testid="modal:issue-details"]');
-});
+})

@@ -153,4 +153,45 @@ describe('Issue create', () => {
     });
   });
 
+  it.only('Should validate titles match', () => {
+    const title1 = 'Hello   word!'
+    //cy.log(title.trim())
+    createAnIssue(title1)
+    cy.get('[data-testid="board-list:backlog').within(() => {
+      cy.get('[data-testid="list-issue"]').children().first().then(($name) => {
+        const givenTitle = $name.text();
+        cy.log(title1);
+        cy.log(givenTitle);
+        expect(givenTitle).equals(title1);
+      });
+
+    });
+
+  });
+
+  // Create a new test that verifies that the application is removing unnecessary spaces on the board view.
+  //   Create a new test in the spec file “issue-create.cy.js”.
+  //   Define the issue title as a variable and add multiple spaces between words. 
+  //For example: const title = ' Hello world!
+  //   Create an issue with this title (a short summary), save the issue, 
+  //and observe it on the board (issues on the board will not have extra spaces 
+  //and will be trimmed).
+  //   Access the created issue title (by default, new issues will be created at the top
+  // of the backlog, so they will always be the first element in the list of all issues 
+  //on the board).
+  //   Assert this title with a predefined variable, but remove extra spaces from it 
+  //(string function trim()).
+
 });
+function createAnIssue(titles) {
+  const description = faker.lorem.sentence()
+  cy.get('[data-testid="modal:issue-create"]').within(() => {
+    cy.get('.ql-editor').type(description);
+    cy.get('input[name="title"]').type(titles);
+    cy.get('button[type="submit"]').click();
+  });
+  cy.get('[data-testid="modal:issue-create"]').should('not.exist');
+  cy.contains('Issue has been successfully created.').should('be.visible');
+  cy.reload();
+  cy.contains('Issue has been successfully created.').should('not.exist');
+}
